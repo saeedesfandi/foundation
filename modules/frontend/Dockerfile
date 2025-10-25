@@ -1,4 +1,4 @@
-FROM node:22-trixie
+FROM node:24-trixie
 
 ENV DEBIAN_FRONTEND=noninteractive
 
