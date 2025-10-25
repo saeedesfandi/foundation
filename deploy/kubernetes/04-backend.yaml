@@ -1,0 +1,113 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend
+  namespace: foundation
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: foundation.deepland.ir
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:  
+              service:
+                name: backend
+                port: 
+                  number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: foundation
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80  
+      protocol: TCP   
+  selector:
+    app: backend
+---
+apiVersion: apps/v1   
+kind: Deployment
+metadata:
+  name: backend
+  namespace: foundation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: app   
+          image: registry.deepland.dev/foundation/backend:1.0.0
+          ports:
+            - containerPort: 80
+          env:
+            - name: DEVELOP
+              value: "False"
+            - name: DEBUG
+              value: "True"
+            - name: SECRET_KEY
+              value: "your-very-secure-secret-key-here"
+            - name: ALLOWED_HOSTS
+              value: "localhost,127.0.0.1,backend,foundation.me,foundation.deepland.ir"
+            - name: INTERNAL_IPS
+              value: "127.0.0.1,192.168.1.100"
+            - name: DOMAIN_NAME
+              value: "foundation.deepland.ir"
+            - name: BASE_URL
+              value: "https://foundation.deepland.ir"
+            - name: DB_HOST
+              value: "postgres-cluster-rw"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "app"
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: password
+            - name: REDIS_URL
+              value: "redis://redis:6379/0"
+            - name: EMAIL_HOST
+              value: "smtp.gmail.com"
+            - name: EMAIL_PORT
+              value: "587"
+            - name: EMAIL_HOST_USER
+              value: "your-email@gmail.com"
+            - name: EMAIL_HOST_PASSWORD
+              value: "your-email-password"
+            - name: GOOGLE_CLIENT_ID
+              value: "xxx.apps.googleusercontent.com"
+            - name: GOOGLE_CLIENT_SECRET
+              value: "xx-xx-xx-xx"
+            - name: DJANGO_SUPERUSER_PHONE
+              value: "09010010001"
+            - name: DJANGO_SUPERUSER_USERNAME
+              value: "admin"
+            - name: DJANGO_SUPERUSER_PASSWORD
+              value: "adminp123"
+            - name: DJANGO_SUPERUSER_EMAIL
+              value: "admin-foundation@gmail.com"
+            - name: GUNICORN_LOG_LEVEL
+              value: "DEBUG"
+            - name: GUNICORN_WORKERS
+              value: "1"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: PAGE_SIZE
+              value: "20"
+          command: ["bash", "-c", "app-runserver.sh"]

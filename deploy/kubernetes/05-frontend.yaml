@@ -1,0 +1,75 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  namespace: foundation
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: foundation.deepland.ir
+      http:
+        paths:
+          - path: /   
+            pathType: Prefix
+            backend:  
+              service:
+                name: frontend
+                port: 
+                  number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: foundation
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80  
+      protocol: TCP   
+  selector:
+    app: frontend
+---
+apiVersion: apps/v1   
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: foundation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: app
+          image: registry.deepland.dev/foundation/frontend:1.0.0
+          ports:
+            - containerPort: 80
+          env:
+            - name: PORT
+              value: "80"
+            - name: APP_PUBLIC_API_URL
+              value: "https://foundation.deepland.ir/backend/api"
+            - name: AUTH_SECRET
+              value: "..."
+            - name: GOOGLE_CLIENT_ID
+              value: "xxx.apps.googleusercontent.com"
+            - name: GOOGLE_CLIENT_SECRET
+              value: "xx-xx-xx-xx"
+            - name: NEXTAUTH_URL
+              value: "https://foundation.deepland.ir"
+            - name: NEXTAUTH_SECRET
+              value: "your-random-secret-key"
+            - name: AUTH_TRUST_HOST
+              value: "true"
+          command: ["bash", "-c", "app-runserver.sh"]
