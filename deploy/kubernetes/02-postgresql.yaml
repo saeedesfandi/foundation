@@ -5,6 +5,7 @@ metadata:
   name: postgres-cluster
   namespace: foundation
 spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:18-standard-trixie
   instances: 1
   storage:
     size: 1Gi
