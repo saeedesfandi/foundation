@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
-import createNextIntlPlugin from 'next-intl/plugin';
+import createNextIntlPlugin from "next-intl/plugin";
 import withSerwistInit from "@serwist/next";
 
 // === تنظیمات اصلی ===
 const ENABLE_STATIC_EXPORT = process.env.EXPORT === "true"; // مثلاً: EXPORT=true npm run build
 
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   // === تصاویر (Custom Loader) ===

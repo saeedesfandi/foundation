@@ -21,8 +21,14 @@
   --font-mono: var(--font-geist-mono);
 
   @keyframes example {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -163,8 +169,8 @@
   /* h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-montserrat), var(--font-inter), sans-serif;
   } */
-  
+
   html[dir="rtl"] * {
-  direction: rtl;
-}
+    direction: rtl;
+  }
 }

@@ -1,3 +1,3 @@
 export interface Profile {
-    username: string;
+  username: string;
 }

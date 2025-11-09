@@ -9,14 +9,14 @@ export default async function proxy(req) {
   const { pathname, nextUrl } = req.nextUrl;
 
   // 1. i18n: پیش‌فرض fa برای root (بدون چک اتوماتیک)
-  if (pathname === '/') {
-    return NextResponse.redirect(new URL('/fa', req.url));
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/fa", req.url));
   }
 
   // 2. Auth: چک لاگین برای /panel
   const session = await auth();
   const isLoggedIn = !!session;
-  
+
   if (pathname === "/panel/login") {
     if (isLoggedIn) {
       return NextResponse.redirect(new URL("/panel", req.url));

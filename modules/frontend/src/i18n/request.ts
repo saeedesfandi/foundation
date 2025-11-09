@@ -1,7 +1,7 @@
-import { getRequestConfig } from 'next-intl/server';
+import { getRequestConfig } from "next-intl/server";
 
 export default getRequestConfig(async () => {
-  const locale = 'fa'; // Set your default locale here (or dynamically from cookies/headers if needed)
+  const locale = "fa"; // Set your default locale here (or dynamically from cookies/headers if needed)
 
   return {
     locale,

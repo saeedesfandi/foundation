@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { useLocale } from 'next-intl';
-import { notFound } from 'next/navigation';
+import { useLocale } from "next-intl";
+import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Vazirmatn } from "next/font/google";
 import "../globals.css";
 
 // برای Static Rendering
 export function generateStaticParams() {
-  return [{locale: 'fa'}, {locale: 'en'}];  // فقط این دو رو pre-render کن
+  return [{ locale: "fa" }, { locale: "en" }]; // فقط این دو رو pre-render کن
 }
 
 // === English Fonts (Geist) ===
@@ -80,15 +80,20 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const resolvedParams = await params;
-const locale = resolvedParams.locale;
+  const locale = resolvedParams.locale;
 
   // اگر locale نامعتبر، به notFound برو (پیش‌فرض fa)
-  if (!['fa', 'en'].includes(locale)) {
-notFound();
-}
+  if (!["fa", "en"].includes(locale)) {
+    notFound();
+  }
 
   return (
-    <html lang={locale} dir={locale === 'fa' ? 'rtl' : 'ltr'} className={`${geistSans.variable} ${geistMono.variable} ${vazirmatn.variable}`} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={locale === "fa" ? "rtl" : "ltr"}
+      className={`${geistSans.variable} ${geistMono.variable} ${vazirmatn.variable}`}
+      suppressHydrationWarning
+    >
       <body className="font-sans antialiased" suppressHydrationWarning={true}>
         {children}
       </body>
