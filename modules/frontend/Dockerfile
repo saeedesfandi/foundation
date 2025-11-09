@@ -23,15 +23,21 @@ ENV TZ="Asia/Tehran" \
 
 WORKDIR /app
 
-COPY ./package.json ./package-lock.json /app/
-RUN npm ci --no-audit --no-fund
+# npm
+# COPY ./package.json ./package-lock.json /app/
+# RUN npm ci --no-audit --no-fund
+
+# pnpm
+COPY ./package.json ./pnpm-lock.yaml /app/
+RUN pnpm install --frozen-lockfile --prefer-offline
 
 COPY ./bin/* /usr/local/bin/
 COPY . /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+# RUN npm run build
     # npm prune --include production && \
     # rm -rf /root/.npm /tmp/*
+RUN pnpm run build
 
 CMD ["app.sh"]
